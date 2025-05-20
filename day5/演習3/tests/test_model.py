@@ -6,7 +6,7 @@ import pickle
 import time
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
@@ -120,6 +120,16 @@ def test_model_accuracy(train_model):
     # Titanicデータセットでは0.75以上の精度が一般的に良いとされる
     assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
 
+def test_model_f1score(train_model):
+    """モデルの精度（F値）を検証"""
+    model, X_test, y_test = train_model
+
+    # 予測と精度計算
+    y_pred = model.predict(X_test)
+    f1score = f1_score(y_test, y_pred)
+
+    # 基準を0.7に設定
+    assert f1score >= 0.7, f"モデルの精度（F値）が低すぎます: {f1score}"
 
 def test_model_inference_time(train_model):
     """モデルの推論時間を検証"""
